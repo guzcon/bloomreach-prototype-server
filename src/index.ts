@@ -1,6 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { BloomreachAPI } from "./data-sources/bloomreach";
+import { BloomreachAPI } from "./data-sources/bloomreach.js";
 
 interface ContextValue {
   dataSources: {

@@ -18,35 +18,35 @@ const typeDefs = `#graphql
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     getBooks: [Book]
-    getPage(path: String!): any
+    getPage(path: String!): String
   }
 `;
 const books = [
-    {
-        title: "The Awakening",
-        author: "Kate Chopin",
-    },
-    {
-        title: "City of Glass",
-        author: "Paul Auster",
-    },
+  {
+    title: "The Awakening",
+    author: "Kate Chopin",
+  },
+  {
+    title: "City of Glass",
+    author: "Paul Auster",
+  },
 ];
 // Resolvers define how to fetch the types defined in your schema.
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
-    Query: {
-        getBooks: books,
-        getPage: async (_, { path }, { dataSources }) => {
-            return dataSources.bloomreachAPI.getPage(path);
-        },
+  Query: {
+    getBooks: books,
+    getPage: async (_, { path }, { dataSources }) => {
+      return dataSources.bloomreachAPI.getPage(path);
     },
+  },
 };
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    introspection: true,
+  typeDefs,
+  resolvers,
+  introspection: true,
 });
 const port = Number.parseInt(process.env.PORT) || 4000;
 // Passing an ApolloServer instance to the `startStandaloneServer` function:
@@ -54,16 +54,16 @@ const port = Number.parseInt(process.env.PORT) || 4000;
 //  2. installs your ApolloServer instance as middleware
 //  3. prepares your app to handle incoming requests
 const { url } = await startStandaloneServer(server, {
-    listen: { port },
-    context: async () => {
-        const { cache } = server;
-        return {
-            // We create new instances of our data sources with each request,
-            // passing in our server's cache.
-            dataSources: {
-                bloomreachAPI: new BloomreachAPI({ cache }),
-            },
-        };
-    },
+  listen: { port },
+  context: async () => {
+    const { cache } = server;
+    return {
+      // We create new instances of our data sources with each request,
+      // passing in our server's cache.
+      dataSources: {
+        bloomreachAPI: new BloomreachAPI({ cache }),
+      },
+    };
+  },
 });
 console.log(`🚀  Server ready at: ${url}`);
